@@ -1,0 +1,177 @@
+<?php
+include_once('../connection.php');
+$oid = $_GET['oid'];
+$query = "select * from bills where billid=2";
+$result = mysqli_query($cn,$query);
+$data = mysqli_fetch_array($result);
+
+require_once('../TCPDF-main/tcpdf.php');
+
+class Pdf extends TCPDF
+{
+	function __construct()
+	{
+		parent::__construct();
+	}
+}
+class MYPDF extends TCPDF {
+
+	//Page header
+	public function Header() {
+		// Logo
+		$image_file = K_PATH_IMAGES.'logo.jpg';
+			$this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+		// Set font
+		$this->SetFont('helvetica', 'B', 20);
+		// Title
+		$this->Cell(28, 50, 'SHO-SHA', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+	}
+
+	// Page footer
+	public function Footer() {
+		// Position at 15 mm from bottom
+		$this->SetY(-15);
+		// Set font
+		$this->SetFont('helvetica', 'I', 8);
+		// Page number
+		$this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+	}
+}
+//============================================================+
+// File name   : example_007.php
+// Begin       : 2008-03-04
+// Last Update : 2013-05-14
+//
+// Description : Example 007 for TCPDF class
+//               Two independent columns with WriteHTMLCell()
+//
+// Author: Nicola Asuni
+//
+// (c) Copyright:
+//               Nicola Asuni
+//               Tecnick.com LTD
+//               www.tecnick.com
+//               info@tecnick.com
+//============================================================+
+
+/**
+ * Creates an example PDF TEST document using TCPDF
+ * @package com.tecnick.tcpdf
+ * @abstract TCPDF - Example: Two independent columns with WriteHTMLCell()
+ * @author Nicola Asuni
+ * @since 2008-03-04
+ */
+
+// Include the main TCPDF library (search for installation path).
+
+
+// create new PDF document
+$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+// set document information
+$pdf->SetCreator(PDF_CREATOR);
+$pdf->SetAuthor('Nicola Asuni');
+$pdf->SetTitle('TCPDF Example 007');
+$pdf->SetSubject('TCPDF Tutorial');
+$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+// set default header data
+$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 007', PDF_HEADER_STRING);
+
+// set header and footer fonts
+$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+// set default monospaced font
+$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+// set margins
+$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+// set auto page breaks
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+// set image scale factor
+$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+// set some language-dependent strings (optional)
+if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+	require_once(dirname(__FILE__).'/lang/eng.php');
+	$pdf->setLanguageArray($l);
+}
+
+// ---------------------------------------------------------
+
+// set font
+$pdf->SetFont('times', '', 12);
+
+// add a page
+$pdf->AddPage();
+
+// create columns content
+$html = '<hr/>';
+$html .= '<table style="border:1px solid black;">';
+$html .= '
+	<tr>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+<tr>
+	<td colspan="3">Bill No.: '.$data['billid'].'</td>
+	<td rowspan="2">Date:02/10/2021</td>
+</tr>
+<tr><td></td></tr>
+<tr>
+	<td colspan="5">Customer Name: Shri/Mr/Ms: '.$data['cname'].' </td>
+</tr>
+<tr><td></td></tr>
+<tr>
+	<td>SR No.</td>
+	<td>Product</td>
+	<td>Qty</td>
+	<td>Rate</td>
+	<td>Total</td>
+</tr>
+
+<tr>
+	<td>1</td>
+	<td>'.$data['pname'].'</td>
+	<td>'.$data['quantity'].'</td>
+	<td>'.$data['rate'].'</td>
+	<td>'.$data['total'].'</td>
+</tr>
+';
+$html .= '</table>';
+
+// create columns content
+// writeHTMLCell($w, $h, $x, $y, $html='', $border=0, $ln=0, $fill=0, $reseth=true, $align='', $autopadding=true)
+
+// get current vertical position
+$y = $pdf->getY();
+
+// set color for background
+$pdf->SetFillColor(255,255,255);
+
+// set color for text
+$pdf->SetTextColor(0, 63, 127);
+
+// write the first column
+$pdf->writeHTMLCell(180, '', '', $y,$html, 1, 0, 1, true, 'J', true);
+
+
+// reset pointer to the last page
+$pdf->lastPage();
+
+// ---------------------------------------------------------
+
+//Close and output PDF document
+$pdf->Output('example_007.pdf', 'I');
+
+//============================================================+
+// END OF FILE
+//============================================================+

@@ -1,0 +1,35 @@
+ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #edc7ca;
+}
+li{
+	float: left;
+}
+li a, .drpbtn{
+	color:white;
+	text-decoration: none;
+	padding: 5px 10px;
+	text-align: center;
+	display: inline-block;
+}
+li a:hover{
+	background-color: #bf7a80;
+}
+.dropdown-content{
+	display: none;
+	position: absolute;
+	background-color: blue;
+	min-width: 40px;
+}
+.dropdown:hover .dropdown-content{
+	display: block;
+}
+.dropdown-content a{
+	color:white;
+	padding: 4px 6px;
+	display: block;
+	text-align: left;
+}
