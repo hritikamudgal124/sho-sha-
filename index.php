@@ -6,7 +6,7 @@ include('header.php');
           <div class="slider_bg">
             <div class="slider">
               <ul class="items">
-                <li> <img src="../images/img1.jpg" alt="This Is A Image">
+                <li> <img src="./images/img1.jpg" alt="This Is A Image">
                   <div class="banner"> <strong>Italian<span>Fettuccine</span></strong> <b>Dish of the Day</b>
                     <p> <span>Lorem ipsum dolamet consectetur<br>
                       adipisicing elit, sed do eiusmod tempor aliqua enim ad minim veniam, quis nosinci- didunt ut labore et dolore.</span> </p>
