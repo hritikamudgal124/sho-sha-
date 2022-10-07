@@ -1,3 +1,6 @@
+<?php
+include('header.php');
+?>
 <!-- content -->
         <article id="content">
           <div class="slider_bg">
